@@ -28,3 +28,16 @@ ALTER TABLE topping # ALTER table statement to create a PK and Constraint; Altho
     # Add more ALTER as needed i.e. INDEX, AUTO_INCREMENT, DEFAULT... 
 ;
 
+CREATE TABLE customer (
+	id INT NOT NULL,
+    add_strt VARCHAR(255),
+    add_ct VARCHAR(255),
+    add_ste VARCHAR(255),
+    prefer VARCHAR(255)
+);
+
+CREATE TABLE transactions (
+	id INT NOT NULL,
+    tea_id INT NOT NULL,
+    price INT NOT NULL
+);
