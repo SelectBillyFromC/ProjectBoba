@@ -12,7 +12,6 @@ CREATE TABLE topping (
 );
 
 ALTER TABLE topping # ALTER table statement to create a PK and Constraint; Although, multiple ALTER statement in a single line is MySQL extension to standard SQL. (https://dev.mysql.com/doc/refman/5.6/en/alter-table.html)
-	ADD PRIMARY KEY (id),
     ADD CONSTRAINT pk_topping PRIMARY KEY (id)
     # Add more ALTER as needed i.e. INDEX, AUTO_INCREMENT, DEFAULT... 
 ;
@@ -25,7 +24,7 @@ CREATE TABLE bobatea (
     price DECIMAL(13, 2),
 	CONSTRAINT pk_bobatea PRIMARY KEY (id, topping_id, flavor_id),
     FOREIGN KEY (topping_id) REFERENCES topping(id),
-	FOREIGN KEY (flavor_id) REFERENCES falavor(id)
+	FOREIGN KEY (flavor_id) REFERENCES flavor(id)
 );
 
 CREATE TABLE customer (
@@ -43,7 +42,6 @@ CREATE TABLE transactions (
 	id INT PRIMARY KEY,
     tea_id INT NOT NULL,
     price INT NOT NULL,	# Is this the sum of all purchases for this transaction? 
-    PRIMARY KEY (id),
     FOREIGN KEY (tea_id) REFERENCES bobatea(id)
 );
 
@@ -115,7 +113,7 @@ CREATE TABLE shop_boba (
     boba_id INT,
     PRIMARY KEY (shop_id, boba_id),
     FOREIGN KEY (shop_id) REFERENCES shop(id),
-    FOREIGN KEY (boba_id) REFERENCES boba(id)
+    FOREIGN KEY (boba_id) REFERENCES bobatea(id)
 );
 
 # Based on professor's comment
