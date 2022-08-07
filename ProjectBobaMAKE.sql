@@ -47,9 +47,9 @@ CREATE TABLE customer (
 
 CREATE TABLE transactions (
 	id INT PRIMARY KEY,
-    tea_id INT,
-    price INT,	# Is this the sum of all purchases for this transaction? Then Trigger Insert?
-    FOREIGN KEY (tea_id) REFERENCES bobatea(id)
+    tea_id INT NOT NULL,
+    price INT NOT NULL,
+    FOREIGN KEY (tea_id, price) REFERENCES bobatea(id, price)
 );
 
 CREATE TABLE shop (
@@ -68,7 +68,7 @@ CREATE TABLE inventory (
 	id INT PRIMARY KEY,
     shop_id INT NOT NULL,	# Shop has ONE inventory, inventory has ONE shop. 1-1 Relationship, but decided against merging table.
 	FOREIGN KEY (shop_id) REFERENCES shop(id),
-    amount INT # Percent of inventory. Possible Trigger Insert
+    amount INT
 );
 
 ##### In MySQL, there is no implementation of sub/supertype.
