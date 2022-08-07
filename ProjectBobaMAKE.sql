@@ -48,7 +48,7 @@ CREATE TABLE customer (
 CREATE TABLE transactions (
 	id INT PRIMARY KEY,
     tea_id INT NOT NULL,
-    price INT NOT NULL,
+    price DECIMAL(13, 2) NOT NULL,
     FOREIGN KEY (tea_id, price) REFERENCES bobatea(id, price)
 );
 
