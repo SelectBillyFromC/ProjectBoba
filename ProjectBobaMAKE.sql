@@ -24,11 +24,11 @@ ALTER TABLE topping # ALTER table statement to create a PK and Constraint; Altho
 
 CREATE TABLE bobatea (
 	id INT NOT NULL,
-    topping_id INT NOT NULL, # Is this part of PK? We defined that boba tea may NOT have topping, but, this cannot be a null value. I can't believe the professor and we didn't catch this LOL
-    flavor_id INT NOT NULL,
+    topping_id INT, # This is not part of the PK.
+    flavor_id INT NOT NULL,	 # This is not part of the PK.
     descript VARCHAR(255),
     price DECIMAL(13, 2),
-	CONSTRAINT pk_bobatea PRIMARY KEY (id, topping_id, flavor_id),
+	CONSTRAINT pk_bobatea PRIMARY KEY (id),
     FOREIGN KEY (topping_id) REFERENCES topping(id),
 	FOREIGN KEY (flavor_id) REFERENCES flavor(id)
 );
