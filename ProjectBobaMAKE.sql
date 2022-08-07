@@ -1,3 +1,9 @@
+/*
+* CS579 Database Management
+* Summer 2022
+* Project Boba Physical Design
+*/
+
 CREATE TABLE flavor (
 	id INT NOT NULL,
     descript VARCHAR(255),
@@ -35,13 +41,14 @@ CREATE TABLE customer (
     add_st VARCHAR(255) NOT NULL,	# State is two alphabet, we should set rules with all 50 states?
     add_zip INT NOT NULL,	# Formatted 5 digit int? or char?
     tel VARCHAR(255),	# Tel number is also formatted as 11 digits. We should enforce rules?
-    prefer VARCHAR(255) # Should this refer to boba tea?
+    prefer VARCHAR(255), # Should this refer to boba tea?
+    CONSTRAINT chk_cust_tel CHECK (tel NOT LIKE'%[^0-9]%')
 );
 
 CREATE TABLE transactions (
 	id INT PRIMARY KEY,
-    tea_id INT NOT NULL,
-    price INT NOT NULL,	# Is this the sum of all purchases for this transaction? 
+    tea_id INT,
+    price INT,	# Is this the sum of all purchases for this transaction? Then Trigger Insert?
     FOREIGN KEY (tea_id) REFERENCES bobatea(id)
 );
 
@@ -52,10 +59,16 @@ CREATE TABLE shop (
     add_city VARCHAR(255) NOT NULL,
     add_st VARCHAR(255) NOT NULL,	# State is two alphabet, we should set rules with all 50 states?
     add_zip INT NOT NULL,	# Formatted 5 digit int? or char?
-    tel VARCHAR(255)	# Tel number is also formatted as 11 digits. We should enforce rules?
+    tel VARCHAR(255),	# Tel number is also formatted as 11 digits. We should enforce rules?
     # Let's get rid of OwnedOrRent
-    
-    # MISSING FOREIGN KEYS. PLEASE ADD HERE
+	CONSTRAINT chk_shop_tel CHECK (tel NOT LIKE'%[^0-9]%')
+);
+
+CREATE TABLE inventory (
+	id INT PRIMARY KEY,
+    shop_id INT NOT NULL,	# Shop has ONE inventory, inventory has ONE shop. 1-1 Relationship, but decided against merging table.
+	FOREIGN KEY (shop_id) REFERENCES shop(id),
+    amount INT # Percent of inventory. Possible Trigger Insert
 );
 
 ##### In MySQL, there is no implementation of sub/supertype.
@@ -73,7 +86,10 @@ CREATE TABLE staff_emp (
     add_zip INT NOT NULL,	# Formatted 5 digit int? or char?
     tel VARCHAR(255),	# Tel number is also formatted as 11 digits. We should enforce rules?
     title VARCHAR(255),
-    hr_rate INT
+    hr_rate INT,
+    shop_id INT NOT NULL,	# Based on Prof's Comment
+    FOREIGN KEY (shop_id) REFERENCES shop(id),
+	CONSTRAINT chk_emp_tel CHECK (tel NOT LIKE'%[^0-9]%')
 );
 
 CREATE TABLE staff_mgr (
@@ -86,12 +102,10 @@ CREATE TABLE staff_mgr (
     add_zip INT NOT NULL,	# Formatted 5 digit int? or char?
     tel VARCHAR(255),	# Tel number is also formatted as 11 digits. We should enforce rules?
     title VARCHAR(255),
-    salary INT
-);
-
-CREATE TABLE inventory (
-	id INT PRIMARY KEY,
-    amount INT # Not sure what this indicates.
+    salary INT,
+	shop_id INT NOT NULL,	# Based on Prof's Comment
+    FOREIGN KEY (shop_id) REFERENCES shop(id),
+    CONSTRAINT chk_mgr_tel CHECK (tel NOT LIKE'%[^0-9]%')
 );
 
 CREATE TABLE ingredient (
