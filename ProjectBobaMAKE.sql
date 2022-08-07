@@ -48,8 +48,8 @@ CREATE TABLE customer (
 CREATE TABLE transactions (
 	id INT PRIMARY KEY,
     tea_id INT NOT NULL,
-    price DECIMAL(13, 2) NOT NULL,
-    FOREIGN KEY (tea_id, price) REFERENCES bobatea(id, price)
+    # price DECIMAL(13, 2) NOT NULL,		## This can be easily referenced. Also, this is not unique, meaning foreign key reference missing index. Error Code 1822
+    FOREIGN KEY (tea_id) REFERENCES bobatea(id)
 );
 
 CREATE TABLE shop (
