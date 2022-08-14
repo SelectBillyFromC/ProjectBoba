@@ -7,14 +7,12 @@
 CREATE TABLE flavor (
 	id INT NOT NULL,
     descript VARCHAR(255),
-    price DECIMAL(13, 2),
     CONSTRAINT pk_flavor PRIMARY KEY (id) # Constraint naming is ignored in MySQL apparently.. Good practice for other SQL servers!
 );
 
 CREATE TABLE topping (
 	id INT,
-    descript VARCHAR(255),
-    price INT
+    descript VARCHAR(255)
 );
 
 ALTER TABLE topping # ALTER table statement to create a PK and Constraint; Although, multiple ALTER statement in a single line is MySQL extension to standard SQL. (https://dev.mysql.com/doc/refman/5.6/en/alter-table.html)
@@ -24,11 +22,11 @@ ALTER TABLE topping # ALTER table statement to create a PK and Constraint; Altho
 
 CREATE TABLE bobatea (
 	id INT NOT NULL,
-    topping_id INT, # This is not part of the PK.
-    flavor_id INT NOT NULL,	 # This is not part of the PK.
+    topping_id INT NOT NULL, # Is this part of PK? We defined that boba tea may NOT have topping, but, this cannot be a null value. I can't believe the professor and we didn't catch this LOL
+    flavor_id INT NOT NULL,
     descript VARCHAR(255),
     price DECIMAL(13, 2),
-	CONSTRAINT pk_bobatea PRIMARY KEY (id),
+	CONSTRAINT pk_bobatea PRIMARY KEY (id, topping_id, flavor_id),
     FOREIGN KEY (topping_id) REFERENCES topping(id),
 	FOREIGN KEY (flavor_id) REFERENCES flavor(id)
 );
@@ -47,8 +45,8 @@ CREATE TABLE customer (
 
 CREATE TABLE transactions (
 	id INT PRIMARY KEY,
-    tea_id INT NOT NULL,
-    # price DECIMAL(13, 2) NOT NULL,		## This can be easily referenced. Also, this is not unique, meaning foreign key reference missing index. Error Code 1822
+    tea_id INT,
+    price INT,	# Is this the sum of all purchases for this transaction? Then Trigger Insert?
     FOREIGN KEY (tea_id) REFERENCES bobatea(id)
 );
 
@@ -68,7 +66,7 @@ CREATE TABLE inventory (
 	id INT PRIMARY KEY,
     shop_id INT NOT NULL,	# Shop has ONE inventory, inventory has ONE shop. 1-1 Relationship, but decided against merging table.
 	FOREIGN KEY (shop_id) REFERENCES shop(id),
-    amount INT
+    amount INT # Percent of inventory. Possible Trigger Insert
 );
 
 ##### In MySQL, there is no implementation of sub/supertype.
